@@ -1,0 +1,86 @@
+body {
+    background-color: rgb(222, 168, 102);
+
+}
+
+h1 {
+    color: aqua;
+    text-align: center;
+    font-weight: bold;
+}
+
+h2 {
+    color: brown;
+    text-align: right;
+    font-style: italic;
+    text-decoration: underline;
+}
+
+p {
+    font-family: monospace;
+}
+
+#top {
+    color: greenyellow;
+}
+
+.fancy {
+    color: tomato;
+
+}
+
+.common {
+    background-color: gray;
+    border: 2px solid white;
+    Position: absolute
+}
+
+.header {
+    top: 5px;
+    left: 15px;
+    right: 25px;
+    height: 100px;
+}
+
+
+.left {
+    top: 115px;
+    left: 15px;
+    width: 1000px;
+    bottom: 40px;
+
+}
+
+.right {
+    top: 115px;
+    right: 25px;
+    width: 1000px;
+    bottom: 40px;
+
+}
+
+.main {
+    top: 115px;
+    left: 130px;
+    right: 140px;
+    height: fit-content;
+}
+
+.footer {
+    bottom: 5px;
+    height: 25px;
+    left: 15px;
+    right: 25px;
+    position: fixed;
+    z-index: 1;
+}
+
+.redtext{
+    color:red;
+
+}
+
+.purpletext{
+    color:purple;
+
+}

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shoot Like LeBron</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f3f3f3;
+    }
+    h1, h2 {
+      font-weight: bold;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* --- GAME STYLES --- */
+    #gameCanvas {
+      background: #a3d7ff;
+      display: block;
+      margin: 20px auto;
+      border: 3px solid #000;
+      border-radius: 10px;
+    }
+    #shootBtn {
+      padding: 10px 20px;
+      font-size: 18px;
+      background: #ff9800;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      color: white;
+      display: block;
+      margin: auto;
+    }
+    #shootBtn:hover {
+      background: #e68a00;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>How to Shoot Like LeBron James</h1>
+
+    <h2>Key Shooting Concepts</h2>
+    <ul>
+      <li>Strong, balanced base</li>
+      <li>Smooth upward shooting motion</li>
+      <li>High release point</li>
+      <li>Follow-through with wrist relaxed and fingers pointed down</li>
+      <li>Use your legs for power, not just your arms</li>
+    </ul>
+
+    <h2>Images</h2>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/2/25/LeBron_James_Lakers.jpg" width="300" />
+    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/LeBron_James_%28Lakers%29.jpg" width="300" />
+
+    <h2>Video Links</h2>
+    <ul>
+      <li><a href="https://www.youtube.com/watch?v=FZSZniUu7Ts" target="_blank">LeBron Shooting Form Breakdown</a></li>
+      <li><a href="https://www.youtube.com/watch?v=_n4wJ8TXv2M" target="_blank">LeBron Workout & Shooting Routine</a></li>
+    </ul>
+
+    <h2>Advanced Basketball Shooting Game (With Backboard Physics)</h2>
+    <p>Press "Shoot" to take a shot. Ball now bounces realistically off the backboard!</p>
+
+    <canvas id="gameCanvas" width="500" height="400"></canvas>
+    <button id="shootBtn">Shoot!</button>
+
+    <script>
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+
+      const rimX = 360;
+      const rimY = 150;
+      const rimRadius = 25;
+
+      const backboardX = 390;
+      const backboardY = 80;
+      const backboardWidth = 10;
+      const backboardHeight = 120;
+
+      let ball = {
+        x: 100,
+        y: 300,
+        radius: 12,
+        vx: 0,
+        vy: 0,
+        gravity: 0.4,
+        inMotion: false
+      };
+
+      function drawCourt() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Backboard
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(backboardX, backboardY, backboardWidth, backboardHeight);
+
+        // Rim
+        ctx.beginPath();
+        ctx.arc(rimX, rimY, rimRadius, 0, Math.PI * 2);
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        // Ball
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "orange";
+        ctx.fill();
+      }
+
+      function updateBall() {
+        if (!ball.inMotion) return;
+
+        ball.vy += ball.gravity;
+        ball.x += ball.vx;
+        ball.y += ball.vy;
+
+        // Backboard collision
+        if (
+          ball.x + ball.radius > backboardX &&
+          ball.y > backboardY &&
+          ball.y < backboardY + backboardHeight
+        ) {
+          ball.vx = -ball.vx * 0.7; // bounce with damping
+          ball.x = backboardX - ball.radius;
+        }
+
+        // Rim collision
+        const dx = ball.x - rimX;
+        const dy = ball.y - rimY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < rimRadius + ball.radius) {
+          const angle = Math.atan2(dy, dx);
+          ball.vx = Math.cos(angle) * 3;
+          ball.vy = Math.sin(angle) * 3;
+        }
+
+        // Stop ball if it falls off screen
+        if (ball.y > canvas.height + 50) {
+          ball.inMotion = false;
+        }
+      }
+
+      function loop() {
+        drawCourt();
+        updateBall();
+        requestAnimationFrame(loop);
+      }
+
+      loop();
+
+      document.getElementById("shootBtn").onclick = () => {
+        if (!ball.inMotion) {
+          ball.x = 100;
+          ball.y = 300;
+          ball.vx = 5 + Math.random() * 2;
+          ball.vy = -8 - Math.random() * 3;
+          ball.inMotion = true;
+        }
+      };
+    </script>
+  </div>
+</body>
+</html>
